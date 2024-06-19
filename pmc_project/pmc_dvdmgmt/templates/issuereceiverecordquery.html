@@ -1,0 +1,292 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Issue Receive Record Search Query</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Issue Receive Record Search Query</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+
+                <div id="query-builder"></div>
+
+                <div id="builder"></div>
+                <div class="btn-group">
+                  <button class="btn btn-warning" id="btn-reset">Reset</button>
+                  <button class="btn btn-success" id="btn-set">Set rules</button>
+                  <button class="btn btn-primary" id="btn-get">Get rules</button>
+                </div>
+
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+
+
+  <script>
+
+function getCSRFToken() {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, 'csrftoken'.length + 1) === 'csrftoken=') {
+          cookieValue = decodeURIComponent(cookie.substring('csrftoken'.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+
+    $(document).ready(function () {
+      // Initialize QueryBuilder with an empty set of rules
+      $('#query-builder').queryBuilder({
+        plugins: ['bt-tooltip-errors'],
+        filters: [
+          {
+            id: 'dvd_id',
+            label: 'DVD ID',
+            type: 'string'
+          },
+          {
+            id: 'issued_to',
+            label: 'Issued To',
+            type: 'string',
+          },
+          {
+            id: 'issued_date',
+            label: 'Issued Date',
+            type: 'date',
+            plugin: 'datepicker', // Specify the plugin to use for the date picker
+            plugin_config: {
+              format: 'yyyy-mm-dd', // Specify the date format
+              autoclose: true // Automatically close the date picker after selecting a date
+            }
+          }
+        ]
+      });
+
+      // Handler for the "Set rules" button
+      $('#btn-set').on('click', function () {
+        // Get the rules selected by the user
+        var rules = $('#query-builder').queryBuilder('getRules');
+
+        // Convert the rules object to JSON
+        var query = JSON.stringify(rules);
+
+        // Send the query to the backend
+        fetch(" ", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken() // Include CSRF token
+          },
+          body: query
+        })
+          .then(response => {
+            // Handle the response from the backend
+            console.log(response);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+    });
+
+
+  </script>
+
+
+  <style>
+    .query-builder,
+    .query-builder * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .query-builder {
+      font-family: sans-serif;
+    }
+
+    .query-builder .hide {
+      display: none;
+    }
+
+    .query-builder .pull-right {
+      float: right !important;
+    }
+
+    .query-builder .btn {
+      text-transform: none;
+      display: inline-block;
+      padding: 6px 12px;
+      margin-bottom: 0px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      touch-action: manipulation;
+      cursor: pointer;
+      user-select: none;
+      background-image: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .query-builder .btn.focus,
+    .query-builder .btn:focus,
+    .query-builder .btn:hover {
+      color: #333;
+      text-decoration: none;
+    }
+
+    .query-builder .btn.active,
+    .query-builder .btn:active {
+      background-image: none;
+      outline: 0px none;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.125) inset;
+    }
+
+    .query-builder .btn-success {
+      color: #FFF;
+      background-color: #5CB85C;
+      border-color: #4CAE4C;
+    }
+
+    .query-builder .btn-primary {
+      color: #FFF;
+      background-color: #337AB7;
+      border-color: #2E6DA4;
+    }
+
+    .query-builder .btn-danger {
+      color: #FFF;
+      background-color: #D9534F;
+      border-color: #D43F3A;
+    }
+
+    .query-builder .btn-success.active,
+    .query-builder .btn-success.focus,
+    .query-builder .btn-success:active,
+    .query-builder .btn-success:focus,
+    .query-builder .btn-success:hover {
+      color: #FFF;
+      background-color: #449D44;
+      border-color: #398439;
+    }
+
+    .query-builder .btn-primary.active,
+    .query-builder .btn-primary.focus,
+    .query-builder .btn-primary:active,
+    .query-builder .btn-primary:focus,
+    .query-builder .btn-primary:hover {
+      color: #FFF;
+      background-color: #286090;
+      border-color: #204D74;
+    }
+
+    .query-builder .btn-danger.active,
+    .query-builder .btn-danger.focus,
+    .query-builder .btn-danger:active,
+    .query-builder .btn-danger:focus,
+    .query-builder .btn-danger:hover {
+      color: #FFF;
+      background-color: #C9302C;
+      border-color: #AC2925;
+    }
+
+    .query-builder .btn-group {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .query-builder .btn-group>.btn {
+      position: relative;
+      float: left;
+    }
+
+    .query-builder .btn-group>.btn:first-child {
+      margin-left: 0px;
+    }
+
+    .query-builder .btn-group>.btn:first-child:not(:last-child) {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    .query-builder .btn-group>.btn:last-child:not(:first-child) {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+
+    .query-builder .btn-group .btn+.btn,
+    .query-builder .btn-group .btn+.btn-group,
+    .query-builder .btn-group .btn-group+.btn,
+    .query-builder .btn-group .btn-group+.btn-group {
+      margin-left: -1px;
+    }
+
+    .query-builder .btn-xs,
+    .query-builder .btn-group-xs>.btn {
+      padding: 1px 5px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+  </style>
+
+
+</body>

@@ -1,0 +1,213 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Issue Receive Record</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Issue Receive Record</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <!-- Button and dropdown menu in the same row -->
+                <div class="row">
+                  <div class="col">
+                    <!-- Button -->
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>CD/DVD NAME</th>
+                      <th>SPECS</th>
+                      <th>CLASSIFICATION</th>
+                      <th>PURCHASE DATE</th>
+                      <th>PURCHASED BY</th>
+                      <th>Booking Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ dvd.id }}</td>
+                      <td>{{ dvd.name }}</td>
+                      <td>{{ dvd.specs }}</td>
+                      <td>{{ dvd.classification }}</td>                     
+                      <td>{{ dvd.purchase_date  |date:"d-M-Y"  }}</td>
+                      <td>{{ dvd.purchased_by }}</td>
+                      <td>{{ dvd.booking_status }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+
+                <!-- value="{{ dvd.returned_date|date:'Y-m-d H:i:s' }}" -->
+                <br>
+
+                <!-- <table id="example2" class="table table-bordered table-striped table-hover">
+
+
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>CD/DVD NAME </th>
+                      <th>ISSUED TO </th>
+                      <th>ISSUED DATE </th>
+                      <th>RETURNED BY </th>
+                      <th>RETURNED DATE </th>
+                      <th>STATUS </th>
+                      <th>PURPOSE </th>
+                      <th>REMARKS </th>
+                      <th>RETURN STATUS</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+
+                    {% for record in issuerecords %}
+                    <tr>
+                      <td>{{ record.id }}</td>
+                      <td>{{ record.dvd }}</td>
+                      <td>{{ record.issued_to }}</td>
+                      <td>{{ record.issue_date }}</td>
+                      <td>{{ record.returned_by }}</td>
+                      <td>{{ record.returned_date}}</td>
+                      <td>{{ record.status }}</td>
+                      <td>{{ record.purpose }}</td>
+                      <td>{{ record.remarks }}</td>
+                      <td>{{ record.return_status }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table> -->
+              
+              
+              
+              
+                <table id="example2" class="table table-bordered table-striped table-hover">
+
+                  <!-- <table id="example1" class="table table-bordered table-striped table-hover"> -->
+
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>CD/DVD NAME </th>
+                      <th>ISSUED TO </th>
+                      <th>ISSUED DATE </th>
+                      <th>RETURNED BY </th>
+                      <th>RETURNED DATE </th>
+                      <th>STATUS </th>
+                      <th>PURPOSE </th>
+                      <th>REMARKS </th>
+                      <th>RETURN STATUS</th>
+                      <th>Uploaded File</th>
+
+
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+
+                    {% for record in issuerecords %}
+                    <tr>
+                      <td>{{ record.id }}</td>
+                      <td>{{ record.dvd }}</td>
+                      <td>{{ record.issued_to }}</td>
+                      <td>{{ record.issue_date|date:"d-M-Y"  }}</td>
+                      <td>{{ record.returned_by }}</td>
+                      <td>{{ record.returned_date |date:"d-M-Y" }}</td>
+                      <td>{{ record.status }}</td>
+                      <td>{{ record.purpose }}</td>
+                      <td>{{ record.remarks }}</td>
+                      <td>{{ record.return_status }}</td>
+                      <td>
+                        {% if record.uploaded_file %}
+                            <a href="{{ record.uploaded_file.url }}" download="{{ record.uploaded_file.name }}">{{record.uploaded_file}}</a>
+                        {% else %}
+                            No file uploaded
+                        {% endif %}
+                    </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              
+              
+              
+              
+              
+              
+              
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+
+  <script>
+    $(function () {
+      $("#example2").DataTable({
+        "responsive": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+      // Open form for adding new record when Add button is clicked
+      $("#addRecordBtn").click(function () {
+        // Redirect to the URL for adding a new record
+        window.location.href = "{% url 'dvdAddition' %}"
+      });
+    });
+  </script>
+
+
+
+</body>

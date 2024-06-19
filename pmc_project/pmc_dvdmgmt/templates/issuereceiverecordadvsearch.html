@@ -1,0 +1,411 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Issue Receive Record Advanced Search</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Issue Receive Record Advanced Search</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+
+                <form id="advancedSearchForm" action="{% url 'issuereceiverecordadvsearch' %}" method="post">
+                  {% csrf_token %}
+
+                  <div class="form-row">
+                    <label for="dvd_id" class="col-md-2">DVD ID</label>
+                    <div class="form-group col-md-3">
+                      <select class="form-control select2bs4" id="dvd_id" name="cd_dvd_id">
+                        <option value="">DVD ID</option>
+                        {% for dvd in available_dvds %}
+                        <option value="{{ dvd.name }}" data-dvd-id="{{ dvd.pk }}">{{ dvd.name }}</option>
+                        {% endfor %}
+                      </select>
+                      <input type="hidden" id="cd_dvd_id" name="cd_dvd_id"> <!-- Hidden field to store DVD ID -->
+                    </div>
+                  </div>
+
+
+                  <br>
+
+                  <div class="form-row">
+                    <label for="issued_to" class="col-md-2">ISSUED To</label>
+                    <div class="form-group col-md-3">
+                      <input type="text" class="form-control" id="inputEmail4" placeholder="ISSUED TO" name="issued_to">
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">ISSUE DATE <small>Between</small></label>
+
+                    <div class="form-group col-md-3">
+                      <div class="input-group date" id="issueDate1" data-target-input="nearest">
+                        <input type="date" class="form-control" name="issue_date_1" placeholder="Date From" />
+
+                      </div>
+                    </div>
+                    <p> and </p>
+
+                    <div class="form-group col-md-3">
+                      <div class="input-group date" id="issueDate2" data-target-input="nearest">
+                        <input type="date" class="form-control" name="issue_date_2" placeholder="Date Till" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <br>
+                  <div class="form-row">
+                    <label for="returned_by" class="col-md-2">RETURNED BY<small>Contain</small></label>
+                    <div class="form-group col-md-3">
+                      <input type="text" class="form-control" id="returned_by" placeholder="RETURNED BY"
+                        name="returned_by">
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">RETURNED DATE <small>Between</small></label>
+                    <div class="form-group col-md-3">
+                      <div class="input-group date" id="returnDate1" data-target-input="nearest">
+                        <input type="date" class="form-control" name="return_date_1" placeholder="Date From" />
+                      </div>
+                    </div>
+                    <p> and </p>
+
+                    <div class="form-group col-md-3">
+                      <div class="input-group date" id="returnDate2" data-target-input="nearest">
+                        <input type="date" class="form-control" name="return_date_2" placeholder="Date Till" />
+
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">STATUS</label>
+                    <div class="form-group col-md-10">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="status" id="classification1" value="working">
+                        <label class="form-check-label" for="classification1">Working</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="status" id="classification2"
+                          value="OUT OF ORDER">
+                        <label class="form-check-label" for="classification2">Out Of Order</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="status" id="classification3"
+                          value="ANYOTHER">
+                        <label class="form-check-label" for="classification3">Any Other</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">SHREDDED</label>
+                    <div class="form-group col-md-10">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="shredded" id="shredd1" value="Yes">
+                        <label class="form-check-label" for="classification1">Yes</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="shredded" id="shredd2"
+                          value="No">
+                        <label class="form-check-label" for="classification2">No</label>
+                      </div>
+
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">PURPOSE</label>
+                    <div class="form-group col-md-10">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="purpose" id="classification1" value="CIF">
+                        <label class="form-check-label" for="classification1">CIF</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="purpose" id="classification2"
+                          value="Upload/ Download (e-Office)">
+                        <label class="form-check-label" for="classification2">Upload/ Download (e-Office)</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="purpose" id="classification3" value="media">
+                        <label class="form-check-label" for="classification3">Media</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="purpose" id="classification4"
+                          value="Any Other">
+                        <label class="form-check-label" for="classification4">Any Other</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">RETURN STATUS</label>
+                    <div class="form-group col-md-10">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="return_status" id="classification1"
+                          value="returnable">
+                        <label class="form-check-label" for="classification1">Returnable</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="return_status" id="classification2"
+                          value="non-returnable">
+                        <label class="form-check-label" for="classification2">Non-Returnable</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+
+
+
+
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+              </div>
+
+
+              <div class="card-body after_json_response" style="display: none;">
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                  <!-- Table header -->
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>CD/DVD NAME</th>
+                      <th>ISSUED To</th>
+                      <th>ISSUED Date</th>
+                      <th>RETURNED By</th>
+                      <th>RETURNED Date</th>
+                      <th>STATUS</th>
+                      <th>PURPOSE</th>
+                      <th>REMARKS</th>
+                      <th>RETURN STATUS</th>
+                      <th>SHREDDED</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+
+  <script>
+    $(document).ready(function () {
+      $('#advancedSearchForm').submit(function (e) {
+        e.preventDefault(); // Prevent default form submission
+        var formData = $(this).serialize(); // Serialize form data
+
+        // Submit AJAX request to the server
+        $.ajax({
+          type: 'POST',
+          url: $(this).attr('action'), // Form action URL
+          data: formData,
+          success: function (response) {
+            // Clear existing table data
+            $('#example1 tbody').empty();
+            $('#advancedSearchForm').hide();
+            $('.after_json_response').show();
+
+            // Append new rows with JSON response data
+            $.each(response.data, function (index, record) {
+              var row = '<tr>' +
+                '<td>' + record.id + '</td>' +
+                '<td>' + record.dvd_id + '</td>' +
+                '<td>' + record.issued_to + '</td>' +
+                '<td>' + record.issue_date + '</td>' +
+                '<td>' + record.returned_by + '</td>' +
+                '<td>' + record.returned_date + '</td>' +
+                '<td>' + record.status + '</td>' +
+                '<td>' + record.purpose + '</td>' +
+                '<td>' + record.remarks + '</td>' +
+                '<td>' + record.return_status + '</td>' +
+                '<td>' + record.shredded + '</td>' +
+                // '<td class="action-icons">' +
+                // '<a href="#" data-toggle="tooltip" title="Edit" data-placement="bottom"><i class="fas fa-edit"></i></a>' +
+                // '<a href="#" data-toggle="tooltip" title="Delete" data-placement="bottom"><i class="fas fa-trash"></i></a>' +
+                // '</td>' +
+                '</tr>';
+              $('#example1 tbody').append(row);
+            });
+
+            // Initialize DataTables after data is appended
+            initializeDataTables();
+
+            // Show the div containing the table
+            $('.after_json_response').show();
+          },
+          error: function (xhr, status, error) {
+            // Handle error
+            console.error(error);
+            // alert('Error: ' + xhr.responseText); // Display the error message from the server        
+            // alert('An error occurred while fetching data.');
+          }
+        });
+      });
+
+      // Function to initialize DataTables
+      function initializeDataTables() {
+        $("#example1").DataTable({
+          "responsive": true,
+          "lengthChange": true,
+          "autoWidth": false,
+          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      }
+    });
+
+
+  </script>
+
+
+  <script>
+    $(function () {
+      //Initialize Select2 Elements
+      $('.select2').select2()
+
+      //Initialize Select2 Elements
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+
+      //Issue Date and time picker
+      $('#issueDate1').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'YYYY-MM-DD HH:mm:ss'
+      });
+
+
+      //Issue Date and time picker
+      $('#issueDate2').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'YYYY-MM-DD HH:mm:ss'
+      });
+
+      //Issue Date and time picker
+      $('#returnDate1').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'YYYY-MM-DD HH:mm:ss'
+      });
+
+      //Issue Date and time picker
+      $('#returnDate2').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'YYYY-MM-DD HH:mm:ss'
+      });
+
+      //Return Date and time picker
+      $('#returndatetime').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'YYYY-MM-DD HH:mm:ss'
+      });
+
+
+
+    })
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#dvd_id').on('change', function () {
+        var dvdId = $(this).find(':selected').data('dvd-id');
+        $('#cd_dvd_id').val(dvdId);
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#advancedSearchForm').submit(function (e) {
+        var issueDate1 = $('#issueDate1 input').val();
+        var issueDate2 = $('#issueDate2 input').val();
+        var returnDate1 = $('#returnDate1 input').val();
+        var returnDate2 = $('#returnDate2 input').val();
+
+        if ((issueDate1 || issueDate2) && !(issueDate1 && issueDate2)) {
+          e.preventDefault();
+          alert("Please select both Issue Dates.");
+        }
+
+        if ((returnDate1 || returnDate2) && !(returnDate1 && returnDate2)) {
+          e.preventDefault();
+          alert("Please select both Return Dates.");
+        }
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      // Initialize tooltips
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+
+
+
+  <style>
+    .action-icons a {
+      margin-right: 5px;
+    }
+  </style>
+
+</body>

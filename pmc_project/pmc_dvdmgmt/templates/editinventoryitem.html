@@ -1,0 +1,212 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Inventory <small>Edit</small></h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Inventory Edit</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <form id="myForm" action="{% url 'editinventoryitem' dvd.id %}" method="post" class="needs-validation"
+                  novalidate>
+                  {% csrf_token %}
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">NAME</label>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control" id="inputEmail4" placeholder="CD/DVD String"
+                        name="cd_dvd_string" value="{{ dvd.name }}" required>
+                      <div class="invalid-feedback">Please enter a name.</div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">PURCHASE DATE</label>
+                    <div class="form-group col-md-4">
+                      <input type="date" class="form-control" id="inputPassword4" name="purchased_date"
+                        value="{{ dvd.purchase_date|date:'Y-m-d' }}" required>
+                      <div class="invalid-feedback">Please select a date first</div>
+                    </div>
+                  </div>
+                  <br>
+
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">CLASSIFICATION</label>
+                    <div class="form-group col-md-6"> <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="classification" id="classification1"
+                        value="CD" {% if is_cd %}checked{% endif %} required>
+                      <label class="form-check-label" for="classification1">CD</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="classification" id="classification2"
+                        value="DVD" {% if is_dvd %}checked{% endif %} required>
+                      <label class="form-check-label" for="classification2">DVD</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="classification" id="classification3"
+                          value="Blue Ray" {% if is_blue_ray %}checked{% endif %} required>
+                        <label class="form-check-label" for="classification3">Blue Ray</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">SPECS</label>
+                    <div class="form-group col-md-10"> <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="specs" id="classification1" value="700 MB"
+                        {% if is_700mb %}checked{% endif %} required>
+                        <label class="form-check-label" for="classification1">700 MB</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="specs" id="classification2" value="4.4 GB"
+                        {% if is_44gb %}checked{% endif %} required>
+                        <label class="form-check-label" for="classification2">4.4 GB</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="specs" id="classification3" value="08 GB"
+                        {% if is_08gb %}checked{% endif %} required>
+                        <label class="form-check-label" for="classification3">08 GB</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="specs" id="classification4" value="25 GB"
+                        {% if is_25gb %}checked{% endif %} required>
+                          
+                        <label class="form-check-label" for="classification4">25 GB</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>
+
+
+                 
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">PURCHASED BY</label>
+                    <div class="form-group col-md-6"> <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="purchased_by" id="purchased_by1" value="P&QM"
+                        {% if is_pqm %}checked{% endif %} required>
+                      <label class="form-check-label" for="purchased_by1">P&QM</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="purchased_by" id="purchased_by2" value="SI"
+                          {% if is_si %}checked{% endif %} required>
+                        <label class="form-check-label" for="purchased_by2">SI</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="purchased_by" id="purchased_by3"
+                        value="AnyOther" {% if is_anyother %}checked{% endif %} required>
+                      <label class="form-check-label" for="purchased_by3">AnyOther</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">BOOKING STATUS</label>
+                    <div class="form-group col-md-10"> <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="booking_status" id="classification1"
+                          value="Available" {% if is_available %}checked{% endif %} required>
+                        <label class="form-check-label" for="classification1">Available</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="booking_status" id="classification2"
+                          value="Reserved" {% if is_reserved %}checked{% endif %} required>
+                        <label class="form-check-label" for="classification2">Reserved</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+          
+                  
+                                  
+                  
+                  <button type="submit" class="btn btn-success">Save</button>
+                  <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+  <!-- Add this after including the Bootstrap JavaScript file -->
+  <script>
+    // Enable form validation
+    (function () {
+      'use strict';
+      window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+
+  <script>
+    function cancelForm() {
+      // Redirect to the previous page or perform other actions as needed
+      window.history.back();
+    }
+  </script>
+
+</body>

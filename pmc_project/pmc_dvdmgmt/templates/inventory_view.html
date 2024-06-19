@@ -1,0 +1,144 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Inventory View</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Inventory View</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <!-- Button and dropdown menu in the same row -->
+                <div class="row">
+                  <div class="col">
+                    <!-- Button -->
+                    <div class="btn-group" role="group" aria-label="Button and Dropdown">
+                      <a href="{% url 'issuereceiverecordlist' dvd.id %}" class="btn btn-primary mr-2">Issue Receive Record</a> <!-- Added mr-2 class for margin -->
+
+                      <!-- <a href="{% url 'issuereceiverecordadvsearch' %}" class="btn btn-secondary mr-2">Query Builder</a> Added mr-2 class for margin -->
+
+                      <!-- Dropdown menu -->
+                      <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-bars"></i>
+                        </button>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="{% url 'dvdAddition' %}"><i class="fas fa-plus"></i> Add</a>
+                          <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
+                          <a class="dropdown-item" href="{% url 'dvdDeletionPage' dvd.id %}"><i class="fas fa-trash"></i> Delete</a>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card-body col-8">
+                <table class="table table-bordered table-striped table-hover">
+                  <tbody>
+                    <tr>
+                      <th>ID</th>
+                      <td>{{ dvd.id }}</td>
+                    </tr>
+                    <tr>
+                      <th>CD/DVD NAME</th>
+                      <td>{{ dvd.name }}</td>
+                    </tr>
+                    <tr>
+                      <th>SPECS</th>
+                      <td>{{ dvd.specs }}</td>
+                    </tr>
+                    <tr>
+                      <th>CLASSIFICATION</th>
+                      <td>{{ dvd.classification }}</td>
+                    </tr>
+                    <tr>
+                      <th>PURCHASE DATE</th>
+                      <td>{{ dvd.purchase_date |date:"d-M-Y" }}</td>
+                    </tr>
+                    <tr>
+                      <th>PURCHASED BY</th>
+                      <td>{{ dvd.purchased_by }}</td>
+                    </tr>
+                    <tr>
+                      <th>BOOKING STATUS</th>
+                      <td>{{ dvd.booking_status }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+  <script>
+    // Example of using SweetAlert2 on anchor tag click
+    document.querySelector('a[data-action="delete"]').addEventListener('click', function(event) {
+      event.preventDefault();
+      // Show SweetAlert2 confirmation
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // If user confirms, perform delete action
+          window.location.href = event.target.href; // Redirect to delete URL
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire('Cancelled', 'Your record is safe :)', 'info');
+        }
+      });
+    });
+  </script>
+
+</body>

@@ -1,0 +1,228 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Add to Inventory <small>Bulk</small></h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">DVD Addition</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <form id="myForm" action="{% url 'bulkdvdaddition' %}" method="post" class="needs-validation"
+                  novalidate>
+                  {% csrf_token %}
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">From</label>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control" id="fromInput" placeholder="CD/DVD String"
+                        name="cd_dvd_string_from" required>
+                      <div class="invalid-feedback">Please enter a name.</div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">To</label>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control" id="toInput" placeholder="CD/DVD String"
+                        name="cd_dvd_string_to" required>
+                      <div class="invalid-feedback">Please enter a name.</div>
+                    </div>
+                  </div>
+                  <br>
+
+
+
+                  <div class="form-row">
+                    <label for="inputPassword4" class="col-md-2 required-field">PURCHASE DATE</label>
+                    <div class="form-group col-md-4">
+                      <input type="date" class="form-control" id="inputPassword4" name="purchased_date" required>
+                      <div class="invalid-feedback">Please select a date first</div>
+                    </div>
+                  </div>
+                  <br>
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">CLASSIFICATION</label>
+                    <div class="form-group col-md-10"> <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="classification" id="classification1"
+                          value="CD" required>
+                        <label class="form-check-label" for="classification1">CD</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="classification" id="classification2"
+                          value="DVD" required>
+                        <label class="form-check-label" for="classification2">DVD</label>
+                      </div>
+                      <div class="form-check form-check-inline"> <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="classification" id="classification3"
+                          value="Blue Ray" required>
+                        <label class="form-check-label" for="classification3">Blue Ray</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+
+                  <br>
+
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">SPECS</label>
+                    <div class="form-group col-md-10">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="specs" id="classification1" value="700 MB"
+                          required>
+                        <label class="form-check-label" for="classification1">700 MB</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="specs" id="classification2" value="4.4 GB"
+                          required>
+                        <label class="form-check-label" for="classification2">4.4 GB</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="specs" id="classification3" value="08 GB"
+                          required>
+                        <label class="form-check-label" for="classification3">08 GB</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="specs" id="classification4" value="25 GB"
+                          required>
+                        <label class="form-check-label" for="classification4">25 GB</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+
+                  <br>
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">PURCHASED BY</label>
+                    <div class="form-group col-md-10">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="purchased_by" id="classification1"
+                          value="P&QM" required>
+                        <label class="form-check-label" for="classification1">P&QM</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="purchased_by" id="classification2" value="SI"
+                          required>
+                        <label class="form-check-label" for="classification2">SI</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="purchased_by" id="classification3"
+                          value="AnyOther" required>
+                        <label class="form-check-label" for="classification3">AnyOther</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2 required-field">BOOKING STATUS</label>
+                    <div class="form-group col-md-10">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="booking_status" id="classification1"
+                          value="Available" required>
+                        <label class="form-check-label" for="classification1">Available</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="booking_status" id="classification2"
+                          value="Reserved" required>
+                        <label class="form-check-label" for="classification2">Reserved</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+
+
+                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+  <!-- Add this after including the Bootstrap JavaScript file -->
+  <script>
+    // Enable form validation
+    (function () {
+      'use strict';
+      window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+
+  <script>
+    function cancelForm() {
+      // Redirect to the previous page or perform other actions as needed
+      window.history.back();
+    }
+  </script>
+
+
+<style>
+  .required-field::after {
+    content: "* ";
+    color: rgba(244, 77, 77, 0.955);
+  }
+</style>
+
+</body>

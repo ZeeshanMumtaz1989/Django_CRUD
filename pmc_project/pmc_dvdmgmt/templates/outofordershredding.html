@@ -1,0 +1,308 @@
+{% load dict_extras %}
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Out Of Order - Ready for Shredding</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">OOO Shredding</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="float-right">
+                  <!-- <button class="btn btn-success" id="addRecordBtn"><i class="fas fa-plus"></i> Add</button> -->
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <form id="delete-form" method="post" action="{% url 'shredd_dvds' %}">
+                  {% csrf_token %}
+
+
+                  <table id="example1" class="table table-bordered table-striped table-hover jambo_table bulk_action">
+                    <thead>
+                      <tr id="id-1">
+                        <th class="a-center">
+                          <input type="checkbox" id="select-all">
+                        </th>
+                        <th>ID</th>
+                        <th>CD/DVD NAME</th>
+                        <th>ISSUED TO</th>
+                        <th>ISSUED DATE</th>
+                        <th>RETURNED BY</th>
+                        <th>RETURNED DATE</th>
+                        <th>STATUS</th>
+                        <th>PURPOSE</th>
+                        <th>REMARKS</th>
+                        <th>RETURN STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for dvd in dvds %}
+                      <tr id="id-2">
+                        <td class="a-center ">
+                          <input type="checkbox" class="select-row" data-id="{{dvd.id}}">
+                        </td>
+                        <td>{{ dvd.id }}</td>
+                        <td>{{ dvd.dvd }}</td>
+                        <td>{{ dvd.issued_to }}</td>
+                        <td>{{ dvd.issue_date |date:"d-M-Y" }}</td>
+                        <td>{{ dvd.returned_by }}</td>
+                        <td>{{ dvd.returned_date |date:"d-M-Y" }}</td>
+                        <td>{{ dvd.status }}</td>
+                        <td>{{ dvd.purpose }}</td>
+                        <td>{{ dvd.remarks }}</td>
+                        <td>{{ dvd.return_status }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  <br>
+
+                  <!-- Add a hidden input field to store selected IDs -->
+                  <input type="hidden" name="selected_ids" id="selected_ids">
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">Shredding Date</label>
+                    <div class="form-group col-md-4">
+                      <input type="date" class="form-control" id="shredd_date" name="shredd_date" >
+                      <div class="invalid-feedback">Please select a date first</div>
+                    </div>
+                  </div>
+                  <br>
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-2">Shredding Justification</label>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control" id="comments" placeholder="Write breif note ..."
+                        name="remarks">
+                    </div>
+                  </div>
+                  <button type="button" id="submit-btn" class="btn btn-danger">Shredd</button>
+                </form>
+
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </section>
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Success Message Card -->
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'success' %}
+    <div class="position-fixed" style="top: 50px; right: 10px;">
+      <div class="col-md-3">
+        <div class="card bg-success float-right">
+          <div class="card-header">
+            <h3 class="card-title">Success</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            {{ message }}
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <!-- End Success Message Card -->
+
+
+
+
+
+    <!-- Error Message Card -->
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'error' %}
+    <div class="position-fixed" style="top: 50px; right: 10px;">
+      <div class="col-md-3">
+        <div class="card bg-danger float-right">
+          <div class="card-header">
+            <h3 class="card-title">Error</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            {{ message }}
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <!-- End Error Message Card -->
+
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+
+  <script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+      // Open form for adding new record when Add button is clicked
+      $("#addRecordBtn").click(function () {
+        // Redirect to the URL for adding a new record
+        window.location.href = "{% url 'dvdAddition' %}"
+      });
+    });
+  </script>
+
+  <style>
+    .action-icons a {
+      margin-right: 5px;
+    }
+
+
+    .selected-row {
+      background-color: #99ff99;
+      /* Light green background color */
+      cursor: pointer;
+      /* Change cursor to pointing hand */
+    }
+  </style>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let selectedIds = [];
+
+      // Handle individual row selection
+      document.querySelectorAll('.select-row').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+          const dvdId = this.getAttribute('data-id');
+          if (this.checked) {
+            if (!selectedIds.includes(dvdId)) {
+              selectedIds.push(dvdId);
+            }
+          } else {
+            selectedIds = selectedIds.filter(id => id !== dvdId);
+          }
+
+          console.log('Single DVD Selection'); // For debugging purposes
+          console.log(selectedIds); // For debugging purposes
+        });
+      });
+
+      // Handle 'select all' functionality
+      document.getElementById('select-all').addEventListener('change', function () {
+
+        const isChecked = this.checked;
+        selectedIds = []; // Clear the array first
+
+        document.querySelectorAll('.select-row').forEach(function (checkbox) {
+          checkbox.checked = isChecked;
+          const dvdId = checkbox.getAttribute('data-id');
+          if (isChecked) {
+            if (!selectedIds.includes(dvdId)) {
+              selectedIds.push(dvdId);
+            }
+          }
+        });
+      });
+
+      // Handle form submission
+      document.getElementById('submit-btn').addEventListener('click', function () {
+        // Set the selected IDs in the hidden input field
+        document.getElementById('selected_ids').value = selectedIds.join(',');
+
+        // Get comments from the textarea
+        const comments = document.getElementById('comments').value;
+
+         // Get the shredd date
+         const shredd_date = document.getElementById('shredd_date').value;
+
+
+        // Append comments to the form data (assuming using FormData for submission)
+        const formData = new FormData(document.getElementById('delete-form'));
+        formData.append('comments', comments );
+        formData.append('shredd_date', shredd_date);        
+
+        // Submit the form with updated data
+        fetch(document.getElementById('delete-form').action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+          console.log('formData:', formData);
+            // Handle response from backend
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+    });
+  </script>
+
+</body>

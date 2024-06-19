@@ -1,0 +1,183 @@
+{% load dict_extras %}
+{% load static %}
+{% include 'base.html' %}
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Complete Inventory</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Inventory</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="float-right">
+                  <!-- Add button for adding new record -->
+                  <button class="btn btn-success" id="addRecordBtn"><i class="fas fa-plus"></i> Add</button>
+                  <!-- Add button for issuing new record -->
+                  <button class="btn btn-primary" id="addIssueBtn"><i class="fas fa-clipboard-list"></i> Issue</button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                  <!-- Table header -->
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>CD/DVD NAME</th>
+                      <th>SPECS</th>
+                      <th>FREQUENCY</th>
+                      <th>CLASSIFICATION</th>
+                      <th>PURCHASE DATE</th>
+                      <th>PURCHASED BY</th>
+                      <th>BOOKING STATUS</th>
+                      <th>SHREDDED</th>
+                      <th>ACTIONS</th> <!-- Add column for actions -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for dvd in dvds %}
+                    <tr>
+                      <td>{{ dvd.id }}</td>
+                      <td>{{ dvd.name }}</td>
+                      <td>{{ dvd.specs }}</td>
+                      <td>{{ issue_counts|dict_get:dvd.id }}</td>
+                      <td>{{ dvd.classification }}</td>
+                      <td>{{ dvd.purchase_date|date:"d-M-Y" }}</td>
+                      <td>{{ dvd.purchased_by }}</td>
+                      <td>{{ dvd.booking_status }}</td>
+                      <td>{{ dvd.shredded }}</td>
+                      <td class="action-icons">
+                        <a href="{% url 'inventoryView' dvd.id %}" data-toggle="tooltip" title="View" data-placement="bottom"><i class="fas fa-eye"></i></a>
+                        <a href="{% url 'editinventoryitem' dvd.id %}" data-toggle="tooltip" title="Edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'dvdDeletionPage' dvd.id %}" class="delete-link" data-toggle="tooltip" title="Delete" data-placement="bottom"><i class="fas fa-trash"></i></a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- Display messages with Toastr -->
+  <script>
+    $(document).ready(function () {
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.tags == 'success' %}
+            toastr.success('{{ message }}');
+          {% elif message.tags == 'error' %}
+            toastr.error('{{ message }}');
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    });
+  </script>
+
+  <script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "pageLength": 200,
+        "minlength": 100,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+      // Open form for adding new record when Add button is clicked
+      $("#addRecordBtn").click(function () {
+        window.location.href = "{% url 'dvdAddition' %}"
+      });
+
+      // Open form for issuing new record when Issue button is clicked
+      $("#addIssueBtn").click(function () {
+        window.location.href = "{% url 'dvdIssuance' %}"
+      });
+    });
+  </script>
+
+  <style>
+    .action-icons a {
+      margin-right: 5px;
+    }
+  </style>
+
+  <script>
+    // Example of using SweetAlert2 on anchor tag click
+    document.querySelectorAll('.delete-link').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        var row = link.closest('tr');
+        var bookingStatusCell = row.cells[7]; // Update the index if the booking status column is in a different position
+        var bookingStatus = bookingStatusCell.textContent.trim();
+        if (bookingStatus === 'Reserved') {
+          Swal.fire({
+            title: 'Not Allowed',
+            html: `You cannot delete when it is already <b><i>Reserved</i></b>`,
+            icon: 'warning',
+            confirmButtonText: 'OK',
+            reverseButtons: true
+          });
+        } else {
+          Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this record!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Proceed',
+            cancelButtonText: 'No, Cancel!',
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = link.href; // Redirect to delete URL
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              Swal.fire('Cancelled', 'Your record is safe :)', 'info');
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>

@@ -1,0 +1,176 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+   <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Issue Receive Record</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Issue Receive Record</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="float-right">
+                  <!-- Add button for adding new record -->
+                  <button class="btn btn-success" id="addRecordBtn"><i class="fas fa-plus"></i> Issue</button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                  <!-- Table header -->
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>CD/DVD NAME</th>
+                      <th>ISSUED TO</th>
+                      <th>ISSUED DATE</th>
+                      <th>RETURNED BY</th>
+                      <th>RETURNED DATE</th>
+                      <th>STATUS</th>
+                      <th>PURPOSE</th>
+                      <th>REMARKS</th>
+                      <th>RETURN STATUS</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for dvd in dvds %}
+                    <!-- <tr class="{% if dvd.purpose == 'CIF'%} red-text {% endif%}"> -->
+                    <tr class="{% if dvd.purpose == 'CIF'%} red-text {% elif dvd.purpose == 'eOffice'%} blue-text {% endif%}">
+
+                      <!-- Table data -->
+                      <td>{{ dvd.id }}</td>
+                      <td>{{ dvd.dvd }}</td>
+                      <td>{{ dvd.issued_to }}</td>
+                      <td>{{ dvd.issue_date }}</td>
+                      <td>{{ dvd.returned_by }}</td>
+                      <td>{{ dvd.returned_date }}</td>
+                      <td>{{ dvd.status }}</td>
+                      <td>{{ dvd.purpose }}</td>
+                      <td>{{ dvd.remarks }}</td>
+                      <td>{{ dvd.return_status }}</td>
+
+                      <td class="action-icons">
+                        <!-- Actions column -->
+                        <!-- <a href="{% url 'issuereceiverecordlist' dvd.id %}" data-toggle="tooltip" title="View"
+                          data-placement="bottom"><i class="fas fa-eye"></i></a> -->
+                        <a href="{% url 'editdvdissuance' dvd.id %}" data-toggle="tooltip" title="Edit"
+                          data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <!-- Edit icon -->
+                        <!-- Commented the delete icon intensionally to aviod audit objection, instead we will use the Edit functionality -->
+                        <!-- <a href="{% url 'dvdDeletionPage' dvd.id %}" data-toggle="tooltip" title="Delete"
+                          data-placement="bottom"><i class="fas fa-trash"></i></a>  -->
+                      </td>
+
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </section>
+
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 1.0.0 Beta
+      </div>
+      <strong>Copyright &copy; 2024 </strong> All rights
+      reserved
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+  <script>
+    $(document).ready(function () {
+      {% if messages %}
+      {% for message in messages %}
+      {% if message.tags == 'success' %}
+      toastr.success('{{ message }}');
+      {% elif message.tags == 'error' %}
+      toastr.error('{{ message }}');
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+    });
+  </script>
+
+
+  <script>
+    $(document).ready(function () {
+      // Initialize tooltips
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+
+  <script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        // Added this attribute on demand of Kazim Shah g to display all items in single go
+        "pageLength": 200,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+      // Open form for adding new record when Add button is clicked
+      $("#addRecordBtn").click(function () {
+        // Redirect to the URL for adding a new record
+        window.location.href = "{% url 'dvdIssuance' %}"
+      });
+    });
+  </script>
+
+  <style>
+    .action-icons a {
+      margin-right: 5px;
+    }
+
+
+    .red-text{
+      color: red;
+      /* font-weight: bold; */
+    }
+
+    /* .blue-text{
+      color:royalblue;
+      font-style: italic;
+    } */
+  </style> 
+
+</body>

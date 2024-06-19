@@ -1,0 +1,309 @@
+{% load static %}
+{% include 'base.html' %}
+
+<body class="hold-transition sidebar-mini">
+
+  <div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Inventory Issuance Edit</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active">Inventory Issuance Edit</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <form id="myForm" action="{% url 'editdvdissuance' dvd.id %}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+                      {% csrf_token %}
+
+                      <!-- Form fields -->
+
+                      <div class="form-row">
+                        <label for="inputEmail4" class="col-md-4 required-field">NAME</label>
+                        <div class="form-group col-md-4">
+                          <input type="text" class="form-control" id="dvd_id" placeholder="CD/DVD String" name="cd_dvd_id"
+                            value="{{ dvd.dvd }}" required>
+                          <div class="invalid-feedback">Please enter a name.</div>
+                        </div>
+                      </div>
+                      <br>
+
+                      <div class="form-row">
+                        <label for="inputEmail4" class="col-md-4 required-field">ISSUED TO</label>
+                        <div class="form-group col-md-4">
+                          <input type="text" class="form-control" id="inputEmail4" placeholder="Issued To" name="issued_to"
+                            value="{{dvd.issued_to}}" required>
+                          <div class="invalid-feedback">Please enter a name.</div>
+                        </div>
+                      </div>
+                      <br>
+
+                      
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-4 required-field">ISSUE DATE</label>
+                    <div class="form-group col-md-4">
+                      <input type="date" class="form-control" id="inputPassword4" name="issue_date"
+                        value="{{dvd.issue_date | date:'Y-m-d'}}" required>
+                      <div class="invalid-feedback">Please select a date first</div>
+                    </div>
+                  </div>
+
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-4 required-field">REMARKS</label>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control" id="inputEmail4" placeholder="Remarks" name="remarks"
+                        value="{{ dvd.remarks}}">
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-4 required-field">RETURNED BY</label>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control" id="inputEmail4" placeholder="Returned By"
+                        name="returned_by" value="{{ dvd.returned_by}}">
+                    </div>
+                  </div>
+                  <br>
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-4 required-field">RETURN DATE</label>
+                    <div class="form-group col-md-4">
+                      <input type="date" class="form-control" id="inputPassword4" name="return_date"
+                        value="{{ dvd.returned_date | date:'Y-m-d' }}">
+                      <div class="invalid-feedback">Please select a date first</div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-4 required-field">STATUS</label>
+                    <div class="form-group col-md-6">
+                      <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="status" id="status1" value="WORKING" {% if is_working %}checked{% endif %} required>
+                        <label class="form-check-label" for="status1">Working</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="status" id="status2" value="OUT OF ORDER" {% if is_ooo %}checked{% endif %} required>
+                        <label class="form-check-label" for="status2">Out Of Order</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="status" id="status3" value="ANYOTHER" {% if is_anyotherstatus %}checked{% endif %} required>
+                        <label class="form-check-label" for="status3">Any Other</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-4 required-field">PURPOSE</label>
+                    <div class="form-group col-md-6">
+                      <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="purpose" id="purpose1" value="CIF" {% if is_cif %}checked{% endif %} required>
+                        <label class="form-check-label" for="purpose1">CIF</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="purpose" id="purpose2"
+                          value="eOffice" {% if is_upload %}checked{% endif %} required>
+                        <label class="form-check-label" for="purpose2">eOffice</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="purpose" id="purpose3" value="Media" {% if is_media %}checked{% endif %} required>
+                        <label class="form-check-label" for="purpose3">Media</label>
+                      </div>
+
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="purpose" id="purpose4" value="Any Other" {% if is_anyother %}checked{% endif %} required>
+                        <label class="form-check-label" for="purpose4">Any Other</label>
+                      </div>
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>
+
+
+                  <div class="form-row">
+                    <label for="inputEmail4" class="col-md-4 required-field">RETURN STATUS</label>
+                    <div class="form-group col-md-6">
+                      <!-- Change the width to col-md-10 -->
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="return_status" id="return_status1"
+                          value="returnable" {% if is_returnable %}checked{% endif %} required>
+                        <label class="form-check-label" for="return_status1">Returnable</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <!-- Add form-check-inline class -->
+                        <input class="form-check-input" type="radio" name="return_status" id="return_status2"
+                          value="non-returnable" {% if is_nonreturnable %}checked{% endif %} required>
+                        <label class="form-check-label" for="return_status2">Non-Returnable</label>
+                      </div>
+
+                      <div class="invalid-feedback">Please select a radio option</div>
+                    </div>
+                  </div>
+                  <br>                  
+               
+                     
+                      <!-- File Uploading code section -->
+                      <div class="form-row ">
+                        <label for="file_upload" class="col-md-4 required-field">Upload File</label>
+                        <div class="form-group col-md-6">
+                          <input type="file" class="form-control" id="file_upload" name="file_upload" accept=".pdf,.png,.jpeg,.jpg">
+                          <div class="invalid-feedback">Please upload a file.</div>
+                        </div>
+                      </div>
+
+                      
+
+                      <button type="submit" class="btn btn-success">Save</button>
+                      <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+                    </form>
+                  </div>
+
+                  <!-- File Preview Section -->
+                  <div class="col-md-6 fileUpload">
+                    <div id="file_preview" class="border rounded p-3">
+                      {% if dvd.uploaded_file %}
+                      <a href="{{ dvd.uploaded_file.url }}" download="{{ dvd.uploaded_file.name }}">{{dvd.uploaded_file}}</a>
+                    {% else %}
+                        No file uploaded
+                    {% endif %}
+
+                                        </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+              <!-- /.content-wrapper -->
+              <footer class="main-footer">
+                <div class="float-right d-none d-sm-block">
+                  <b>Version</b> 1.0.0 Beta
+                </div>
+                <strong>Copyright &copy; 2024 </strong> All rights
+                reserved
+              </footer>
+  </div>
+
+
+<script>
+    // Enable form validation
+    (function () {
+      'use strict';
+      window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  
+    // File preview
+    $('#file_upload').on('change', function () {
+      var fileUploadContainer = document.querySelector('.fileUpload');
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var preview = '';
+        if (file.type === 'application/pdf') {
+          preview = '<embed src="' + e.target.result + '" width="650" height="450" type="application/pdf">';
+        } else {
+          preview = '<img src="' + e.target.result + '" width="650" height="450" overflow: auto;  height: auto; width: 100%;>';
+        }
+        fileUploadContainer.style.display = 'block';
+        $('#file_preview').html(preview);
+      };
+      reader.readAsDataURL(file);
+    });
+  
+    function cancelForm() {
+      document.getElementById("myForm").reset();
+      $('#file_preview').html('');
+      window.history.back();
+    }
+  </script>
+   
+
+
+  <script>
+    $(function () {
+      //Initialize Select2 Elements
+      $('.select2').select2()
+
+      //Initialize Select2 Elements
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+
+ 
+
+    })
+  </script>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#dvd_id').on('change', function () {
+        var dvdId = $(this).find(':selected').data('dvd-id');
+        $('#cd_dvd_id').val(dvdId);
+      });
+
+    });
+  </script>
+
+
+  <style>
+    .required-field::after {
+      content: "* ";
+      color: rgba(244, 77, 77, 0.955);
+    }
+
+  /* .fileUpload {
+    display: none; */
+  /* } */
+  </style>
+
+</body>
