@@ -613,3 +613,50 @@ def logoutUser(request):
     logout(request)
     request.session.flush()
     return redirect('login')
+
+
+
+@login_required
+def inventoryAvailable(request):
+
+    dvds = DVDAddition.objects.filter(booking_status='Available')
+    issue_counts = {}
+
+    for dvd in dvds:
+        dvd_id = dvd.id
+        issue_count = IssueReceiveRecord.objects.filter(dvd=dvd_id).count()
+        issue_counts[dvd_id] = issue_count
+
+
+
+    context = {'dvds': dvds, 'issue_counts': issue_counts,}
+
+    return render(request, 'inventory_Available.html', context)
+
+
+
+
+@login_required
+def inventoryReserved(request):
+
+    dvds = DVDAddition.objects.filter(booking_status='Reserved')
+    issue_counts = {}
+
+    for dvd in dvds:
+        dvd_id = dvd.id
+        issue_count = IssueReceiveRecord.objects.filter(dvd=dvd_id).count()
+        issue_counts[dvd_id] = issue_count
+
+
+
+    context = {'dvds': dvds, 'issue_counts': issue_counts,}
+
+    return render(request, 'inventory_Reserved.html', context)
+
+
+
+@login_required
+def inventoryOutofOrder(request):
+    dvds = IssueReceiveRecord.objects.filter(status='OUT OF ORDER')
+    context = {'dvds': dvds}
+    return render(request, 'inventory_OOO.html', context)

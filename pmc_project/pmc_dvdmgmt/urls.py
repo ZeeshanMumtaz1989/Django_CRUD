@@ -7,9 +7,6 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-
-
-
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', views.index, name='index'),
@@ -28,9 +25,11 @@ urlpatterns = [
     path('issuereceiverecordadvsearch/', views.issuereceiverecordadvsearch, name='issuereceiverecordadvsearch'),
     path('outofordershredding/', views.outofordershredding, name='outofordershredding'),
     path('shredd_dvds/', views.shredd_dvds, name='shredd_dvds'),
-
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
+    path('inventoryAvailable/', views.inventoryAvailable, name='inventoryAvailable'), 
+    path('inventoryReserved/', views.inventoryReserved, name='inventoryReserved'), 
+    path('inventoryOutofOrder/', views.inventoryOutofOrder, name='inventoryOutofOrder'),
    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
