@@ -540,17 +540,14 @@ def issuereceiverecordadvsearch(request):
 
 
 
-
+@login_required
 def outofordershredding(request):
-    # dvds = IssueReceiveRecord.objects.filter(status='OUT OF ORDER')
-
     dvds = IssueReceiveRecord.objects.filter(status='OUT OF ORDER', shredded='No')
-
     context = {'dvds': dvds}
     # print(context)
     return render(request, 'outofordershredding.html', context)
 
-
+@login_required
 def shredd_dvds(request):
     if request.method == 'POST':
         selected_ids = request.POST.get('selected_ids')
@@ -577,13 +574,17 @@ def shredd_dvds(request):
                 shredded='Yes',
             )
 
-            return redirect('outofordershredding')  
+            messages.success(request, 'Selected DVDs have been successfully shredded.')
+            return redirect('outofordershredding')
 
         except Exception as e:
-            return redirect('outofordershredding')  
+            messages.error(request, 'An error occurred while shredding the DVDs.')
+            return redirect('outofordershredding')
 
     else:
-        return render(request, 'outofordershredding.html')  
+        return render(request, 'outofordershredding.html')
+
+
 
 
 
