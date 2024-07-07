@@ -29,8 +29,6 @@ class DVDAddition(models.Model):
         db_table = 'dvd_addition'
 
 
-
-
 class IssueReceiveRecord(models.Model):
     id = models.AutoField(primary_key=True)
     dvd = models.ForeignKey('DVDAddition', on_delete=models.CASCADE, related_name='issue_records')
@@ -47,9 +45,9 @@ class IssueReceiveRecord(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     PURPOSE_CHOICES = (
         ('CIF', 'CIF'),
-        ('Upload/ Download (e-Office)', 'Upload/ Download (e-Office)'),
+        ('eOffice', 'eOffice'),
         ('Media', 'Media'),
-        ('Any Other', 'Any Other'),
+        ('ANYOTHER', 'ANYOTHER'),
     )
     purpose = models.CharField(max_length=100, choices=PURPOSE_CHOICES)
     remarks = models.CharField(max_length=200, blank=True, null=True)
@@ -72,4 +70,4 @@ class IssueReceiveRecord(models.Model):
         db_table = 'issue_receive_record'
 
 
-    
+

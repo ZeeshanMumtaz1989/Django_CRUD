@@ -131,6 +131,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
+
+
   <script>
     $(function () {
       $("#example1").DataTable({
@@ -183,8 +185,8 @@
       // Handle form submission
       document.getElementById('submit-btn').addEventListener('click', function () {
         document.getElementById('selected_ids').value = selectedIds.join(',');
+        const comments = document.getElementById('comments');
 
-        const comments = document.getElementById('comments').value;
         const shredd_date = document.getElementById('shredd_date').value;
 
         if (selectedIds.length === 0) {
@@ -197,6 +199,8 @@
           return;
         }
 
+        document.getElementsByName('remarks')[0].value = comments.value;
+
         document.getElementById('delete-form').submit();
       });
     });
@@ -204,13 +208,13 @@
     // Display messages with Toastr
     $(document).ready(function () {
       {% if messages %}
-        {% for message in messages %}
-          {% if message.tags == 'success' %}
-            toastr.success('{{ message }}');
-          {% elif message.tags == 'error' %}
-            toastr.error('{{ message }}');
-          {% endif %}
-        {% endfor %}
+      {% for message in messages %}
+      {% if message.tags == 'success' %}
+      toastr.success('{{ message }}');
+      {% elif message.tags == 'error' %}
+      toastr.error('{{ message }}');
+      {% endif %}
+      {% endfor %}
       {% endif %}
     });
   </script>

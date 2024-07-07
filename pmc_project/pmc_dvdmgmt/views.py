@@ -547,12 +547,14 @@ def outofordershredding(request):
     # print(context)
     return render(request, 'outofordershredding.html', context)
 
+
+
 @login_required
 def shredd_dvds(request):
     if request.method == 'POST':
         selected_ids = request.POST.get('selected_ids')
         selected_ids_list = selected_ids.split(",")
-        comments = request.POST.get('comments')
+        comments = request.POST.get('remarks')
         shredd_date = request.POST.get('shredd_date')
 
         try:
@@ -565,15 +567,12 @@ def shredd_dvds(request):
                 shredded='Yes',
                 date_shredded=shredd_date,
             )
-
             # Retrieve the dvd_ids related to the selected IssueReceiveRecord ids
             dvd_ids = IssueReceiveRecord.objects.filter(id__in=selected_ids_list).values_list('dvd_id', flat=True)
-
             # Update records in the DVDAddition model
             DVDAddition.objects.filter(id__in=dvd_ids).update(
                 shredded='Yes',
             )
-
             messages.success(request, 'Selected DVDs have been successfully shredded.')
             return redirect('outofordershredding')
 
@@ -583,9 +582,6 @@ def shredd_dvds(request):
 
     else:
         return render(request, 'outofordershredding.html')
-
-
-
 
 
 # Added on 05 Jun 2024
